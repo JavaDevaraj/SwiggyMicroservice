@@ -1,0 +1,12 @@
+package com.stackroute.restaurantpartner.config;
+
+public enum ConsumerType {
+	
+	ORDER_SERVICE,
+	DELIVERY_SERVICE,
+	RESTAURANT_SERVICE,
+	DELIVERY_RESTAURANT_SERVICE,
+	ORDER_RESTAURANT_SERVICE,
+	ORDER_DELIVERY_SERVICE
+
+}

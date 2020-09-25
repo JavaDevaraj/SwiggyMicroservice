@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+  labels:
+    app: swiggy-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: order-service-app-pod
+      app: swiggy-api
+  template:
+    metadata:
+      name: order-service-app-pod
+      labels:
+        name: order-service-app-pod
+        app: swiggy-api
+    spec:
+      container:
+        - name: order-service-app
+          image: swiggy_swiggy-api:latest
+          ports:
+            - containerPort: 9090

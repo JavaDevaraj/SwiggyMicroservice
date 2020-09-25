@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-service
+  labels:
+    name: delivery-service
+    app: swiggy-api
+spec:
+  type: NodePort
+  ports:
+    - port: 6060
+      targetPort: 6060
+  selector:
+    name: delivery-service-app-pod
+    app: swiggy-api

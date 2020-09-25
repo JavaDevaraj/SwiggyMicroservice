@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resturant-service-deployment
+  labels:
+    app: swiggy-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: resturant-service-app-pod
+      app: swiggy-api
+  template:
+    metadata:
+      name: resturant-service-app-pod
+      labels:
+        name: resturant-service-app-pod
+        app: swiggy-api
+    spec:
+      container:
+        - name: resturant-service-app
+          image: swiggy_restaurant-api:latest
+          ports:
+            - containerPort: 7070

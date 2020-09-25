@@ -1,0 +1,27 @@
+#Need to change localhost location
+sudo docker run -it --add-host localhost:127.0.0.1 ubuntu cat /etc/hosts
+
+sudo docker run -d -p 2181:2181 --name zookeeper wurstmeister/zookeeper
+
+sudo docker run -d -p 9092:9092 --link zookeeper -e KAFKA_ADVERTISED_HOST_NAME=localhost -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 --name kafkaBroker wurstmeister/kafka
+
+
+sudo docker run -d  -p 27017:27017 --name orderservice mongo
+
+sudo docker run -p 9090:9090 --link orderservice --link kafkaBroker --link zookeeper --name swiggy-api kumar22bms/orderservice-api:2.0
+
+
+~/Downloads/kafka_2.12-2.5.0/bin$ ./zookeeper-server-start.sh ../config/zookeeper.properties
+
+./kafka-server-start.sh ../config/server.properties
+
+ubuntu@ip-172-31-72-71:/var/lib/mongodb$ sudo mongod --dbpath /data/db
+
+
+sudo netstat -tulpn
+
+# commands to use MongoDB in docker.
+sudo docker exec -it orderservice bash
+mongo
+show dbs
+use selecetedDB

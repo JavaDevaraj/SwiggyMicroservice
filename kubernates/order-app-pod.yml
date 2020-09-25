@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadat:
+  name: order-service-app-pod
+  labels:
+    name: order-service-app-pod
+    app: swiggy-api
+spec:
+  container:
+    - name: order-service-app
+      image: swiggy_swiggy-api:latest
+      ports:
+        - containerPort: 9090

@@ -1,0 +1,522 @@
+openapi: 3.0.1
+
+info:
+  title: Swiggy
+  description: '**Swiggy** is a food delivery service with 100s of restaurant partners in over 10 metropolitan cities. We help restaurants accept orders through their partner portal online or through the partner mobile app, and prepare them.'
+  contact:
+    name: StackRoute
+    url: http://stackroute.in
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+
+servers:
+- url: http://localhost:7000
+  description: Local Server
+- url: http://dev-swiggy.com
+  description: Dev
+- url: http://swiggy.com
+  description: Prod
+
+tags:
+- name: Swiggy
+  description: Browse restaurants, their menus and place orders
+- name: Swiggy Restaurant Partner
+  description: Receiving and accepting new orders for restaurant
+- name: Swiggy Delivery Agent
+  description: On-route delivery status
+  
+security:
+  - Authorization_Header: []
+  
+paths:
+  /api/orders:
+    post:
+      tags:
+      - Swiggy
+      summary: 'Place order (Returns: CustomerOrder)'
+      operationId: createOrder
+      requestBody:
+        description: CustomerOrder object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerOrder'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content: {}
+        405:
+          description: Invalid input
+          content: {}
+        default:
+          description: Unexpected error
+          content: {}
+    get:
+      tags:
+      - Swiggy
+      summary: 'Get all Customer Orders (paginated) (Returns: CustomerOrdersList)'
+      parameters:
+      - name: customerId
+        in: query
+        description: CustomerId that need to be considered for filter
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of items per page
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: The index of page to be considered for filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerOrder'
+          headers:
+            X-Total:
+              description: The total number of items 
+              schema:
+                type: integer
+            X-Total-Pages:
+              description: The total number of pages  
+              schema:
+                type: integer
+            X-Per-Page:
+              description: The number of items per page
+              schema:
+                type: integer
+            X-Page:
+              description: The index of the current page (starting at 1)
+              schema:
+                type: integer
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Customer not found
+          content: {}
+      
+  /api/orders/{orderId}:
+    get:
+      tags:
+      - Swiggy
+      summary: 'Get specific Customer Order (Returns: CustomerOrder)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CustomerOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+          
+  /restaurent/api/orders:
+    get:
+      tags:
+      - Swiggy Restaurant Partner
+      summary: 'Get all Restaurant Orders (paginated) (Returns: RestaurantOrdersList)'
+      parameters:
+      - name: restaurantId
+        in: query
+        description: RestaurantId that need to be considered for filter
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of items per page
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: The index of page to be considered for filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestaurantOrder'
+          headers:
+            X-Total:
+              description: The total number of items 
+              schema:
+                type: integer
+            X-Total-Pages:
+              description: The total number of pages  
+              schema:
+                type: integer
+            X-Per-Page:
+              description: The number of items per page
+              schema:
+                type: integer
+            X-Page:
+              description: The index of the current page (starting at 1)
+              schema:
+                type: integer
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Customer not found
+          content: {}
+          
+  /restaurant/api/orders/{orderId}:
+    get:
+      tags:
+      - Swiggy Restaurant Partner
+      summary: 'Get specific Restaurant Order (Returns: RestaurantOrder)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+          
+  /restaurant/api/orders/{orderId}/accept:
+    put:
+      tags:
+      - Swiggy Restaurant Partner
+      summary: 'Accept order (Returns: RestaurantOrder)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+          
+  /restaurant/api/orders/{orderId}/reject:
+    put:
+      tags:
+      - Swiggy Restaurant Partner
+      summary: 'Reject order (Returns: RestaurantOrderRejectRecord)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+
+  /restaurant/api/orders/{orderId}/prepared:
+    put:
+      tags:
+      - Swiggy Restaurant Partner
+      summary: 'Order is prepared (Returns: RestaurantOrderReadyRecord)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RestaurantOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+  
+  /delivery/api/orders:
+    get:
+      tags:
+      - Swiggy Delivery Agent
+      summary: 'Get all Agent Orders (paginated) (Returns: AgentOrdersList)'
+      parameters:
+      - name: agentId
+        in: query
+        description: AgentId that need to be considered for filter
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of items per page
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: The index of page to be considered for filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentOrder'
+          headers:
+            X-Total:
+              description: The total number of items 
+              schema:
+                type: integer
+            X-Total-Pages:
+              description: The total number of pages  
+              schema:
+                type: integer
+            X-Per-Page:
+              description: The number of items per page
+              schema:
+                type: integer
+            X-Page:
+              description: The index of the current page (starting at 1)
+              schema:
+                type: integer
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Customer not found
+          content: {}
+                
+  /delivery/api/orders/{orderId}:
+    get:
+      tags:
+      - Swiggy Delivery Agent
+      summary: 'Get specific Agent Order (Returns: AgentOrder)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+          
+  /delivery/api/orders/{orderId}/arrive:
+    put:
+      tags:
+      - Swiggy Delivery Agent
+      summary: 'Arrived at Restaurant (Returns: AgentArrivedRecord)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+          
+  /delivery/api/orders/{orderId}/pickup:
+    put:
+      tags:
+      - Swiggy Delivery Agent
+      summary: 'Picked up Delivery (Returns: AgentPickupRecord)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+
+  /delivery/api/orders/{orderId}/deliver:
+    put:
+      tags:
+      - Swiggy Delivery Agent
+      summary: 'Order Delivered (Returns: AgentDeliveredRecord)'
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of Order to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AgentOrder'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Order not found
+          content: {}
+        
+components:
+  schemas:
+    CustomerOrder: {}
+    RestaurantOrder: {}
+    AgentOrder: {}
+        
+  securitySchemes:
+    Authorization_Header:
+      type: apiKey
+      name: Authorization
+      in: header

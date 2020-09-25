@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-deployment
+  labels:
+    app: swiggy-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: zookeeper-pod
+      app: swiggy-api
+  template:
+    metadata:
+      name: zookeeper-pod
+      labels:
+        name: zookeeper-pod
+        app: swiggy-api
+    spec:
+      container:
+        - name: zookeeper
+          image: wurstmeister/zookeeper
+          ports:
+            - containerPort: 2181

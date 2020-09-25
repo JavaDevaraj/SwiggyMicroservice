@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  labels:
+    name: kafka-service
+    app: swiggy-api
+spec:
+  type: ClusterIp
+  ports:
+    - port: 9092
+      targetPort: 9092
+  selector:
+    name: kafka-pod
+    app: swiggy-api

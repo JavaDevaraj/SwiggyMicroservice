@@ -1,0 +1,54 @@
+spring:
+  profiles:
+    active: prod
+
+server:
+  port: 9090
+
+
+---
+
+spring:
+  profiles: dev
+  data:
+    mongodb:
+      database: orderServiceDB
+      port: 27017
+      host: localhost
+  kafka:
+    producer:
+      group-id: order-service
+      auto-offset-reset: earliest
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      group-id: order-consumers
+      
+---
+
+spring:
+  profiles: prod
+  data:
+    mongodb:
+      database: orderServiceDB
+      port: 27017
+      host: orderService
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      bootstrap-servers: kafka:9092
+      group-id: order-service
+      auto-offset-reset: earliest
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: kafka:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      group-id: order-consumers
+
+ 

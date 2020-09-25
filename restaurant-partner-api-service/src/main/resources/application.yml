@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    active: prod
+
+server:
+  port: 7070
+  
+---    
+
+spring:
+  profiles: dev
+  data:
+    mongodb:
+      database: restaurantServiceDB
+      port: 27017
+      host: localhost
+  kafka:
+    producer:
+      group-id: order-service
+      auto-offset-reset: earliest
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      group-id: restaurant-consumers
+      
+      
+---    
+
+spring:
+  profiles: prod
+  data:
+    mongodb:
+      database: restaurantServiceDB
+      port: 27017
+      host: orderService
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      group-id: order-service
+      auto-offset-reset: earliest
+      bootstrap-servers: kafka:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: kafka:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      group-id: restaurant-consumers

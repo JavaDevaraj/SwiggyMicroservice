@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-service-deployment
+  labels:
+    app: swiggy-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kafka-pod
+      app: swiggy-api
+  template:
+    metadata:
+      name: kafka-pod
+      labels:
+        name: kafka-pod
+        app: swiggy-api
+    spec:
+      container:
+        - name: kafka
+          image: wurstmeister/kafka
+          ports:
+            - containerPort: 9092

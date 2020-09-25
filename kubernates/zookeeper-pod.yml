@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadat:
+  name: zookeeper-pod
+  labels:
+    name: zookeeper-pod
+    app: swiggy-api
+spec:
+  container:
+    - name: zookeeper
+      image: wurstmeister/zookeeper
+      ports:
+        - containerPort: 2181

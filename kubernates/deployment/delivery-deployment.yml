@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-service-deployment
+  labels:
+    app: swiggy-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: delivery-service-app-pod
+      app: swiggy-api
+  template:
+    metadata:
+      name: delivery-service-app-pod
+      labels:
+        name: delivery-service-app-pod
+        app: swiggy-api
+    spec:
+      container:
+        - name: delivery-service-app
+          image: swiggy_deliveryagent-api:latest
+          ports:
+            - containerPort: 6060

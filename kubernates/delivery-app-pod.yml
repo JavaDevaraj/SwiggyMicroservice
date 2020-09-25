@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadat:
+  name: delivery-service-app-pod
+  labels:
+    name: delivery-service-app-pod
+    app: swiggy-api
+spec:
+  container:
+    - name: delivery-service-app
+      image: swiggy_deliveryagent-api:latest
+      ports:
+        - containerPort: 6060
